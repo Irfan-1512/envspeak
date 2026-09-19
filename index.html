@@ -7,7 +7,69 @@
 </head>
 <body>
   <h1>EnvSpeak</h1>
+
   <button id="micBtn">🎤 Speak your stack</button>
-  <p id="output"></p>
+  <br><br>
+  <input type="text" id="textInput" placeholder="or type your stack here" style="width:300px;">
+  <button id="genBtn">Generate .env</button>
+
+  <pre id="output" style="background:#eee; padding:10px; margin-top:20px;"></pre>
+
+  <script>
+    // ---- Stage 3: rule-based "brain" ----
+    const SERVICES = {
+      groq:      [["GROQ_API_KEY", "your_groq_api_key"]],
+      postgres:  [["DATABASE_URL", "postgresql://user:pass@host:5432/dbname"]],
+      mongodb:   [["MONGODB_URI", "mongodb+srv://user:pass@cluster/dbname"]],
+      firebase:  [["FIREBASE_API_KEY", "your_firebase_api_key"]],
+      stripe:    [["STRIPE_SECRET_KEY", "sk_test_..."]],
+      netlify:   [["NETLIFY_AUTH_TOKEN", "your_netlify_token"]],
+    };
+
+    function generateEnv(text) {
+      const t = text.toLowerCase();
+      let lines = [];
+      for (const service in SERVICES) {
+        if (t.includes(service)) {
+          SERVICES[service].forEach(([key, placeholder]) => {
+            lines.push(`${key}=${placeholder}`);
+          });
+        }
+      }
+      return lines.length ? lines.join("\n") : "No known services matched. Try: groq, postgres, mongodb, firebase, stripe, netlify";
+    }
+
+    document.getElementById('genBtn').addEventListener('click', () => {
+      const text = document.getElementById('textInput').value;
+      document.getElementById('output').textContent = generateEnv(text);
+    });
+
+    // ---- mic code from before (unchanged) ----
+    const micBtn = document.getElementById('micBtn');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      micBtn.disabled = true;
+    } else {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-IN';
+      recognition.interimResults = false;
+
+      recognition.onstart = () => micBtn.textContent = "🎙️ Listening...";
+      recognition.onend = () => micBtn.textContent = "🎤 Speak your stack";
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('textInput').value = transcript;
+        document.getElementById('output').textContent = generateEnv(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        document.getElementById('output').textContent = "Mic error: " + event.error;
+      };
+
+      micBtn.addEventListener('click', () => recognition.start());
+    }
+  </script>
 </body>
 </html>
