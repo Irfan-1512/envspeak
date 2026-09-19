@@ -4,17 +4,79 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EnvSpeak</title>
+  <style>
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  h1 {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  #micBtn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid #30363d;
+    background: #161b22;
+    color:#ffb454;
+    font-size: 22px;
+    cursor: pointer;
+  }
+  #micBtn:hover {
+    background: #21262d;
+  }
+  #textInput {
+    background: #161b22;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 250px !important;
+  }
+  #genBtn, #copyBtn, #downloadBtn {
+    background: transparent;
+    border: 1px solid #ffb454;
+    color: #ffb454;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  #genBtn:hover, #copyBtn:hover, #downloadBtn:hover {
+    background: rgba(255,180,84,0.1);
+  }
+  #output {
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #7ee787;
+    padding: 14px !important;
+  }
+  #status {
+    font-size: 13px;
+  }
+</style>
+<link rel="icon" href="data:,">
 </head>
 <body>
   <h1>EnvSpeak</h1>
 
-  <button id="micBtn">🎤 Speak your stack</button>
-  <br><br>
+  <button id="micBtn">🎤</button>
+  <span style="margin-left:10px;color:#8b949e;font-size:14px;">Speak your stack</span>
+  </span>
   <input type="text" id="textInput" placeholder="or type your stack here" style="width:300px;">
   <button id="genBtn">Generate .env</button>
   <br><br>
 
-  <pre id="output" style="background:#eee; padding:10px; min-height:20px;"></pre>
+  <pre id="output"></pre>
   <button id="copyBtn" style="display:none;">Copy</button>
   <button id="downloadBtn" style="display:none;">Download</button>
 
